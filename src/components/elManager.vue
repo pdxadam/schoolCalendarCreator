@@ -55,11 +55,20 @@
         
         calMan.tools.push(newTool);
     }
-    function downloadiCal() {
+    function downloadBackup(){
+        var txtBackup = calMan.value.getBackup();
+        const filename = "schoolCalendarBackup.json";
+        downloadFile(txtBackup, filename);
+    }
+    function downloadiCal(){
         var txtICal = calMan.value.activeCalendar.makeICal();
         const filename = "schoolCalendar.ical";
+        downloadFile(txtICal, filename);
+    }
+    function downloadFile(txt, filename) {
+        
         var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txtICal));
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt));
         element.setAttribute('download', filename);
         element.style.display = 'none';
         document.body.appendChild(element);
@@ -78,6 +87,7 @@
             <button @click="formState = 'shown';">New Calendar</button>
             <button @click = "toolDisplay='';">Edit Tools</button>
             <button @click = downloadiCal()>Get iCal</button>
+            <button @click = downloadBackup()>Save Backup</button>
         </span>
     </nav>
     <div id="sidebar" :class = "toolDisplay">
