@@ -62,7 +62,9 @@ export default class Manager{
         
         const newCal = Calendar.Generate(new Date(startDate), new Date(endDate), title);
         this.calendars.push(newCal);
+        this.activeCalendar = newCal;
         this.saveCalendars();
+
     }
 
 }

@@ -43,9 +43,9 @@
     }
 </script>
 <template>
+  
     <h1>Edit Tools</h1>
     <main>
-       
         <div id="toolsList">
             
             <h3>Tools:</h3><button @click="setNewMode()">New</button>

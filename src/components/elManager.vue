@@ -39,31 +39,51 @@
         newCalEndDate.value = new Date(endDate);
         
         calMan.value.makeNewCalendar(newCalTitle.value, newCalStartDate.value, newCalEndDate.value);
+        formState.value = "";
+        //refresh the list and go to the new calendar
+
         //check that the dates make sense
         //create the calendar
         //then we get to work on the switching
     }
     function toggleSidebar(){
-        toolDisplay = toolDisplay==hidden?'':'hidden';
+        toolDisplay.value = toolDisplay.value==hidden?'':'hidden';
 
     }
     function saveNewTool(newTool){
         
         calMan.tools.push(newTool);
     }
+    function downloadiCal() {
+        var txtICal = calMan.value.activeCalendar.makeICal();
+        const filename = "schoolCalendar.ical";
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txtICal));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+}
+
     
 </script>
 <template>
-    <nav>
+    <nav id="calNav">
         <select v-model = "calMan.activeCalendar">
             <option v-for= "calendar in calMan.calendars" :value = "calendar">{{ calendar.name }}</option>
-        </select>        
-        <button @click="formState = 'shown';">New Calendar</button>
-        <button @click = "toolDisplay='';">Edit Tools</button>
+        </select>    
+        <span>
+            <button @click="formState = 'shown';">New Calendar</button>
+            <button @click = "toolDisplay='';">Edit Tools</button>
+            <button @click = downloadiCal()>Get iCal</button>
+        </span>
     </nav>
     <div id="sidebar" :class = "toolDisplay">
-        <button @click="toolDisplay='hidden';">Close</button>
-        <ToolEditor @returnTool = "console.log(newTool)" :tools = calMan.tools /> 
+        <div>
+            <button @click="toolDisplay='hidden';">&nbsp;X&nbsp; </button>
+            <ToolEditor @returnTool = "console.log(newTool)" :tools = calMan.tools /> 
+        </div>
     </div>
     <main>        
         <elCalendar :cal = calMan.activeCalendar :tools = calMan.tools />
@@ -124,14 +144,26 @@
 *{
     print-color-adjust: exact;
 }
+
 nav{
     position: sticky;
     top: 0px;
     z-index: 10;
     background-color: white;
+    
 }
 nav *{
     margin: 2px 5px;
+}
+nav span{
+    position: absolute;
+    right: 0px;
+}
+nav select{
+    background-color: grey; 
+    color: white;
+    font-size: 1.2rem;
+
 }
 #sidebar{
     position: fixed;
@@ -151,6 +183,34 @@ nav *{
 #sidebar.hidden{
     width: 0px !important;
 }
+#sidebar div{
+    position: relative;
+    width: 600px;
+    background-color: white;
+    margin: 50px auto;
+    padding: 10px;
+    border-radius: 25px;
+
+}
+#sidebar > div > button{
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: radial-gradient(grey, black);
+    color: white;
+    border-radius: 30px;
+    height: 30px;
+    border: 1px solid black;
+
+
+}
+#sidebar > div > button:hover{
+    color: yellow;
+    border: 1px solid yellow;
+}
+#sidebar > div > button:active{
+    transform: scale(0.95);
+}
 
     #frmNewCalendar{
         position: fixed;
@@ -165,6 +225,7 @@ nav *{
         align-items:center;
         background-color: rgba(0,0,0,0.8);
         z-index: 25;
+        transition: all 0.4s;
     }
     #frmNewCalendar > div > button{
         position: absolute;

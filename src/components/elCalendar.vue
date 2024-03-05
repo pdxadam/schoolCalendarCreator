@@ -44,7 +44,6 @@ function downloadiCal() {
         <header>
             <h1>{{ cal.name }}</h1>
             <h3>{{ cal.startDate.toLocaleString('default', { month: 'long' }) }}, {{  cal.startDate.getFullYear() }} - {{ cal.endDate.toLocaleString('default', { month: 'long' }) }}, {{  cal.endDate.getFullYear() }}</h3>
-            <nav><button @click=downloadiCal()>Get iCal</button></nav>
             <div class="summary">
                 <div class="dayCount">
                     <h4>Student Days: {{ cal.studentDayCount }} &nbsp;&nbsp; 
@@ -81,6 +80,7 @@ function downloadiCal() {
         top: 20px;
         z-index: 5;
         background-color: lightsteelblue;
+        padding: 5px;
     }
     h1{
         border: 1px solid black;

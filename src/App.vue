@@ -23,6 +23,7 @@
 
 <style scoped>
     nav{
+      display: none;
       position: fixed;
       bottom: 0px;
       left: 0px;
