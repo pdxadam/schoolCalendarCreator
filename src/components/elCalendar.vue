@@ -52,7 +52,8 @@ function downloadiCal() {
                 <div class = "termCount">
                     <h3>Student days by Term: </h3>
                     <ul>
-                        <li v-for="(term, index) in cal.termCounts">T{{ index + 1 }}: {{ term }}</li>
+                        <li v-if="cal.termCounts.length == 0">No Terms Defined</li>
+                        <li v-else v-for="(term, index) in cal.termCounts">T{{ index + 1 }}: {{ term }}</li>
                     </ul>   
                 </div>
             </div>

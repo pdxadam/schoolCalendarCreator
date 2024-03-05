@@ -14,7 +14,8 @@
     const endYear = ref(new Date().getFullYear() + 1);
     const endMonth = ref(5); // June default
     var count = 0;  
-    watch(calMan.value.activeCalendar, calChange, { deep: true } );
+    watch(calMan.value, calChange, { deep: true } );
+    
     function calChange(){
         count++;
         calMan.value.saveCalendars();
