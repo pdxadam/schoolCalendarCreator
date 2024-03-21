@@ -50,7 +50,8 @@ export default class Manager{
         
     }
     getBackup(){
-        const jCal = JSON.stringify(this.calendars);
+        //should only backup the active calendar
+        const jCal = JSON.stringify(this.activeCalendar);
         return jCal;
     }
     makeNewCalendar(title, startDate, endDate){

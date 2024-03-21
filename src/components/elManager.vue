@@ -1,6 +1,7 @@
 <script setup>
     import { ref, watch } from 'vue';
     import Manager from '../obj/Manager.js'
+    import Calendar from '../obj/Calendar.js'
     import elCalendar from './elCalendar.vue'
     import ToolEditor from './elToolEditor.vue'
     const calMan = ref(new Manager());
@@ -14,6 +15,8 @@
     const endYear = ref(new Date().getFullYear() + 1);
     const endMonth = ref(5); // June default
     var count = 0;  
+    const file = ref(null);
+
     watch(calMan.value, calChange, { deep: true } );
     
     function calChange(){
@@ -75,19 +78,37 @@
         element.click();
         document.body.removeChild(element);
 }
+function handleFileUpload(){
+    console.log("handling file");
+    console.log(file);
+    var reader = new FileReader();
+    reader.readAsText(file.value.files[0], "UTF-8");
+    reader.onload = function(event){
+        console.log(event.target.result);
+        const rawCal = JSON.parse(event.target.result);
+        const newCalendar = Calendar.fromJson(rawCal);
+        calMan.value.calendars.push(newCalendar);
+        
+        alert("calendar processing complete");
 
+    }
+
+}
     
 </script>
 <template>
     <nav id="calNav">
         <select v-model = "calMan.activeCalendar">
             <option v-for= "calendar in calMan.calendars" :value = "calendar">{{ calendar.name }}</option>
-        </select>    
+        </select> 
+        <br>
+
         <span>
             <button @click="formState = 'shown';">New Calendar</button>
             <button @click = "toolDisplay='';">Edit Tools</button>
             <button @click = downloadiCal()>Get iCal</button>
-            <button @click = downloadBackup()>Save Backup</button>
+            <button @click = downloadBackup()>Backup Current Calendar</button>
+            <input type="file" v-on:change="handleFileUpload()" ref="file">
         </span>
     </nav>
     <div id="sidebar" :class = "toolDisplay">
