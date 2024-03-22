@@ -60,12 +60,12 @@
     }
     function downloadBackup(){
         var txtBackup = calMan.value.getBackup();
-        const filename = "schoolCalendarBackup.json";
+        const filename = "calendarbackup-" + calMan.value.activeCalendar.name + ".json";
         downloadFile(txtBackup, filename);
     }
     function downloadiCal(){
         var txtICal = calMan.value.activeCalendar.makeICal();
-        const filename = "schoolCalendar.ical";
+        const filename = calMan.value.activeCalendar.name + ".ical";
         downloadFile(txtICal, filename);
     }
     function downloadFile(txt, filename) {

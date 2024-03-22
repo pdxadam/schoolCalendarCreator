@@ -57,10 +57,6 @@
         text-align: center;
         color: inherit;
         border-bottom: 1px dashed grey;
-        /* width: 90%;
-        display: block;
-        margin-left: auto;
-        margin-right: auto; */
     }
     .termStart{
         color: black;
