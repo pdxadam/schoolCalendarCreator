@@ -10,6 +10,7 @@
     const newCalEndDate = ref();
     const formState = ref("");
     const toolDisplay = ref("hidden");
+    const settingsDisplay = ref("hidden");
     const startYear = ref(new Date().getFullYear());
     const startMonth = ref(7); //August default
     const endYear = ref(new Date().getFullYear() + 1);
@@ -101,16 +102,30 @@ function handleFileUpload(){
         <select v-model = "calMan.activeCalendar">
             <option v-for= "calendar in calMan.calendars" :value = "calendar">{{ calendar.name }}</option>
         </select> 
-        <br>
+       
+        <button @click = "toolDisplay='';">Edit Tools</button>            
+        <button @click = "settingsDisplay='';">Settings</button>
 
         <span>
-            <button @click="formState = 'shown';">New Calendar</button>
-            <button @click = "toolDisplay='';">Edit Tools</button>
-            <button @click = downloadiCal()>Get iCal</button>
-            <button @click = downloadBackup()>Backup Current Calendar</button>
-            <input type="file" v-on:change="handleFileUpload()" ref="file">
+           
         </span>
     </nav>
+    <div id="settings" :class = "settingsDisplay">
+        <h1 style="text-align: center">Settings</h1>
+        <div>            
+            <button @click="settingsDisplay='hidden';">&nbsp;X&nbsp; </button>
+            <div id="settingsSide">
+                <span class="button" @click="formState = 'shown';">New Calendar</span>
+                <span class="button" @click = downloadiCal()>Get iCal</span>
+                <span class="button" @click = downloadBackup()>Backup Current Calendar</span>
+                <h4>Upload backup: </h4><input type="file" v-on:change="handleFileUpload()" ref="file">
+            </div>
+            <div>
+                <h4>Current Calendar:</h4>
+                <input type="text" v-model = "calMan.activeCalendar.name" placeholder="Name for Current Calendar">
+            </div>
+        </div>
+    </div>
     <div id="sidebar" :class = "toolDisplay">
         <div>
             <button @click="toolDisplay='hidden';">&nbsp;X&nbsp; </button>
@@ -197,7 +212,27 @@ nav select{
     font-size: 1.2rem;
 
 }
-#sidebar{
+.button{
+    background: radial-gradient(rgb(157, 155, 155), gray);
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    padding: 2px 5px;
+    display: block;
+    width: 150px;
+    font-size: 0.8rem;
+    margin: 5px;
+
+}
+.button:hover{
+    color: yellow;
+    cursor: pointer;
+
+}
+.button:active{
+    transform: scale(0.95);
+}
+#sidebar, #settings{
     position: fixed;
     left: 0px;
     top: 0px;
@@ -212,19 +247,23 @@ nav select{
     pointer-events: all;
 
 }
-#sidebar.hidden{
+#sidebar.hidden, #settings.hidden{
     width: 0px !important;
 }
-#sidebar div{
+#sidebar div, #settings > div{
     position: relative;
     width: 600px;
     background-color: white;
     margin: 50px auto;
     padding: 10px;
     border-radius: 25px;
+    min-height: 250px;
 
 }
-#sidebar > div > button{
+#settings > div{
+    display: flex;
+}
+#sidebar > div > button, #settings > div > button{
     position: absolute;
     top: -2px;
     right: -2px;
@@ -236,11 +275,11 @@ nav select{
 
 
 }
-#sidebar > div > button:hover{
+#sidebar > div > button:hover, #settings > div > button:hover{
     color: yellow;
     border: 1px solid yellow;
 }
-#sidebar > div > button:active{
+#sidebar > div > button:active, #settings > div > button:active{
     transform: scale(0.95);
 }
 
