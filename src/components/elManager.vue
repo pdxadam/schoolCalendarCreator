@@ -55,6 +55,12 @@
         toolDisplay.value = toolDisplay.value==hidden?'':'hidden';
 
     }
+    function deleteCalendar(){
+        if (confirm('Are you sure you want to delete the current calendar?')){
+            calMan.value.deleteActiveCalendar(); 
+            settingsDisplay.value = "hidden";                               
+        }
+    }
     function saveNewTool(newTool){
         
         calMan.tools.push(newTool);
@@ -115,7 +121,7 @@ function handleFileUpload(){
         <div>            
             <button @click="settingsDisplay='hidden';">&nbsp;X&nbsp; </button>
             <div id="settingsSide">
-                <span class="button" @click="formState = 'shown';">New Calendar</span>
+                <span class="button" @click="formState = 'shown'; settingsDisplay= 'hidden';">New Calendar</span>
                 <span class="button" @click = downloadiCal()>Get iCal</span>
                 <span class="button" @click = downloadBackup()>Backup Current Calendar</span>
                 <h4>Upload backup: </h4><input type="file" v-on:change="handleFileUpload()" ref="file">
@@ -123,6 +129,7 @@ function handleFileUpload(){
             <div>
                 <h4>Current Calendar:</h4>
                 <input type="text" v-model = "calMan.activeCalendar.name" placeholder="Name for Current Calendar">
+                <span class="button" @click = deleteCalendar()>Delete this Calendar</span>
             </div>
         </div>
     </div>
@@ -241,7 +248,7 @@ nav select{
     overflow: hidden;
     overflow-y: scroll;
     width: 100vw;
-    background: radial-gradient(lightgrey, lightsteelblue);
+    background: rgba(0,0,0,0.8);
     transition: all 0.3s;
     z-index: 30;
     pointer-events: all;

@@ -54,6 +54,15 @@ export default class Manager{
         const jCal = JSON.stringify(this.activeCalendar);
         return jCal;
     }
+    deleteActiveCalendar(){
+        for(var i = 0; i < this.calendars.length;i++){
+            if (this.calendars[i] == this.activeCalendar){
+                this.calendars.splice(i, 1);
+                this.activeCalendar = this.calendars[0];
+                return;
+            }
+        }
+    }
     makeNewCalendar(title, startDate, endDate){
         //check for duplicate title?
         var count = 1;
