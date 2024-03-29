@@ -56,7 +56,7 @@
 
     }
     function deleteCalendar(){
-        if (confirm('Are you sure you want to delete the current calendar?')){
+        if (confirm('Are you sure you want to delete the current calendar?\n\nWe recommend confirming you have a backup first.')){
             calMan.value.deleteActiveCalendar(); 
             settingsDisplay.value = "hidden";                               
         }
