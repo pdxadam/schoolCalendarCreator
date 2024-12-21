@@ -91,7 +91,6 @@ function handleFileUpload(){
     var reader = new FileReader();
     reader.readAsText(file.value.files[0], "UTF-8");
     reader.onload = function(event){
-        console.log(event.target.result);
         const rawCal = JSON.parse(event.target.result);
         const newCalendar = Calendar.fromJson(rawCal);
         calMan.value.calendars.push(newCalendar);
