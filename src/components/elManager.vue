@@ -1,10 +1,12 @@
 <script setup>
     import { ref, watch } from 'vue';
-    import Manager from '../obj/Manager.js'
-    import Calendar from '../obj/Calendar.js'
-    import elCalendar from './elCalendar.vue'
-    import ToolEditor from './elToolEditor.vue'
+    import Manager from '../obj/Manager.js';
+    import Calendar from '../obj/Calendar.js';
+    import elCalendar from './elCalendar.vue';
+    import ToolEditor from './elToolEditor.vue';
+    import ServerConnect from '@/components/ServerConnect.vue';
     const calMan = ref(new Manager());
+    const hasChanged = ref(false);
     const newCalTitle = ref("");
     const newCalStartDate = ref();
     const newCalEndDate = ref();
@@ -21,6 +23,7 @@
     watch(calMan.value, calChange, { deep: true } );
     
     function calChange(){
+        hasChanged.value = true;
         count++;
         calMan.value.saveCalendars();
     }
@@ -103,6 +106,7 @@ function handleFileUpload(){
     
 </script>
 <template>
+    <ServerConnect :obj = "calMan" :hasChanged = "hasChanged" @fetched = "(val) => calMan.processJData(val)" @saved = "hasChanged = false" />
     <nav id="calNav">
         <select v-model = "calMan.activeCalendar">
             <option v-for= "calendar in calMan.calendars" :value = "calendar">{{ calendar.name }}</option>

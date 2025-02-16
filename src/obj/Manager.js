@@ -27,21 +27,26 @@ export default class Manager{
             
         }
         else{
-            var tCal = JSON.parse(jCal);
             
-            for(var i = 0; i < tCal.calendars.length; i++){
-                this.calendars.push(Calendar.fromJson(tCal.calendars[i]));
-                
-            }
-            this.tools = [];
-            for (var i = 0; i < tCal.tools.length; i++){
-                const t = tCal.tools[i];
-                this.tools.push(new DayType(t.title, t.studentDay, t.teacherDay, t.backColor, t.fontColor, t.isTermStart, t.shouldExport));
-         
-            }
-            this.activeCalendar = this.calendars[0];
+            this.processJData(JSON.parse(jCal));         
            
         }
+    }
+    processJData(tCal){
+        //processes parsed JSONdata
+        //TODO: This is adding the calendars, not replacing.
+        this.calendars = [];
+        for(var i = 0; i < tCal.calendars.length; i++){
+            this.calendars.push(Calendar.fromJson(tCal.calendars[i]));
+            
+        }
+        this.tools = [];
+        for (var i = 0; i < tCal.tools.length; i++){
+            const t = tCal.tools[i];
+            this.tools.push(new DayType(t.title, t.studentDay, t.teacherDay, t.backColor, t.fontColor, t.isTermStart, t.shouldExport));
+     
+        }
+        this.activeCalendar = this.calendars[0];
     }
     saveCalendars(){
         
