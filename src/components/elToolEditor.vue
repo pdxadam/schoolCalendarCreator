@@ -19,10 +19,8 @@
         return "background-color: " + backColor.value + "; color: " + fontColor.value + ";";
     }
     function returnedTool(){
-        //TODO: Find out why the term start ones aren't saving term starts.
-        //TODO: set up a way to edit the tool set (change/remove)--how then do we update the calendar to match? \
-        //Toughie: might need to change the data model for those. oof.  complicated. Loop trough the ones that matched and set up
-        //do we only allow one kind with the same name?
+        //TODO: Adjust tool types to IDs, so we can update tools for the calendar. ...Then do we have separate tool sets for each calendar, or for the whole data set? 
+        
 
 
         const newTool = new DayType(newToolName.value, newStudentCount.value, newTeacherCount.value, backColor.value, fontColor.value, isTermStart.value?1:0, shouldExport.value);

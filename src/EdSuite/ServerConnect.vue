@@ -1,19 +1,22 @@
 <script setup>
-    import edsuite from '@/obj/edsuite';
+    import edsuite from '@/EdSuite/edsuite';
     import { ref, onMounted } from 'vue';
     import { ToastProgrammatic as Toast } from 'buefy'
-    import LoginForm from '@/components/loginForm.vue';
+    import LoginForm from '@/EdSuite/loginForm.vue';
+    import RegisterForm from '@/EdSuite/registerForm.vue';
     const props = defineProps({
         obj: Object,
         hasChanged: Boolean,
+        appNumber: Number,
     });
     const emit = defineEmits(["saved", "fetched"]);
     onMounted(() => {
         var ticker = setInterval(saveCheck, 30000);
-        //every 30 seconds, call autoSave
+        //every 30 seconds, call autoSave, which only does anything if changes have happened and it's on
     });
     function saveCheck(){
         //chgeck if I shoiudl save to the server automatically, and do so.
+        
         if (loggedIn.value == true && autoSave.value == true && props.hasChanged == true){
             
             saveToServer();
@@ -22,7 +25,7 @@
     }
     const toast = new Toast();
 
-    const appID = 1;
+    const appID = props.appNumber;
     const ed = edsuite.GetAxios();
     const loggedIn = ref(false);
     const autoSave = ref(false);
@@ -43,10 +46,38 @@
             toast.open({duration: 3000, type: "is-success", message: "Login Successful"});
         }
         else{
-            toast.open({duration: 3000, type: "is-danger", message: "Login Failed"});
+            toast.open({duration: 3000, type: "is-danger", message: u});
         }
         loggedIn.value = value;
     }
+    function updateRegister(value, message){
+        if (value == true){
+            toast.open({duation: 3000, type: "is-success", message: "Registration Successful. Please login"});
+            registerFormActive.value = false;
+            loginFormActive.value = true;
+        }
+        else{
+            toast.open({duration: 3000, type: "is-danger", message: message});
+        }
+    }
+    // async function fetchData(){
+    //     if (!confirm("Are you sure you want to replace existing data with server data")){
+    //         toast.open("Request Canceled");
+    //         return;
+    //     }
+
+    //     let d = await ed.sendPost({rq:30});
+    //     if (typeof(d) == "string" && d.startsWith("Error")){
+    //         toast.open({duration: 3000, type: "is-danger", message: d });
+    //     }
+    //     else if (d.length == 0){
+    //         toast.open({duration: 3000, type: "is-warning", message: "Server data was empty"});
+    //     }
+    //     else{
+    //         Object.assign(props.school, School.FromJson(d));
+    //         toast.open({duration: 3000, type: "is-success", message: "School information updated" });
+    //     }
+    // }
     async function fetchData(){
         if (!confirm("Are you sure you want to replace existing data with server data")){
             toast.open("Request Canceled");
@@ -119,7 +150,9 @@
 
      </b-modal>
     <!-- Need a modal create account page here -->
-    
+    <b-modal v-model = "registerFormActive" has-modal-card trap-focus :destroy-on-hide = "false">
+        <RegisterForm @registerUpdate = "(v, u) => updateRegister(v, u)" @close = "registerFormActive = false" />
+    </b-modal>
 
 </template>
 <style scoped>

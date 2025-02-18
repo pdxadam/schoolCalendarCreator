@@ -1,32 +1,42 @@
 <script setup>
     import { ref } from 'vue';
-    import edsuite from '@/obj/edsuite.js';
+    import edsuite from '@/EdSuite/edsuite.js';
 
     const ed = edsuite.GetAxios();
 
     const loginMessage = ref("");
-    const username = ref("");
+    const email = ref("");
     const password = ref("");
     const emit = defineEmits(["close", "loginUpdate"]);
     async function login(){
-        const response = await ed.sendPost({"rq": 10, 
-        "u": username.value, 
-        "p": password.value, 
-        "app": 1});
-        if (response == "Success."){
-            emit("loginUpdate", true, username.value);
-            loginMessage.value = "Logged in.";
-            close();
+        try{
+            const response = await ed.sendPost({"rq": 10, 
+            "e": email.value, 
+            "p": password.value, 
+            "app": 2});
+            if (response == "Success."){
+                // TODO: get username back from this.
+                emit("loginUpdate", true, email.value);
+                loginMessage.value = "Logged in.";
+                close();
+            }
+            else{
+                emit("loginUpdate", false, "Invalid Username or Password");
+                loginMessage.value = response;
+            }
         }
-        else{
-            emit("loginUpdate", false, "");
-            loginMessage.value = response;
+        catch(e){
+            emit("loginUpdate", false, "Server error: " + e.message);
+
         }
     }
     function close(){
-        username.value = "";
+        email.value = "";
         password.value = "";
         emit("close");
+    }
+    function clearIconClick(){
+        email.value = "";
     }
 </script>
 <template>
@@ -37,18 +47,20 @@
                         <button
                             type="button"
                             class="delete"
-                            @click="$emit('close')"/>
+                            @click="$emit('close')" />
                     </header>
                     <section class="modal-card-body">
-                        <b-field label="Email">
-                            <b-input
-                                type="text"
-                                v-model="username"
-                                placeholder="Your username"
-                                required>
+                        
+                        <b-field>
+                            <b-input placeholder="Email"
+                                v-model="email"
+                                type="email"
+                                icon="email"
+                                icon-right="close-circle"
+                                icon-right-clickable
+                                @icon-right-click="clearIconClick">
                             </b-input>
                         </b-field>
-
                         <b-field label="Password">
                             <b-input
                                 type="password"
@@ -58,8 +70,6 @@
                                 required>
                             </b-input>
                         </b-field>
-
-                        <b-checkbox>Remember me</b-checkbox>
                         <div>{{ loginMessage }}</div>
                     </section>
                     <footer class="modal-card-foot">

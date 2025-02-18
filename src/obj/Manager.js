@@ -20,7 +20,6 @@ export default class Manager{
         
         if (jCal == null || jCal == ""){
             this.calendars = [];
-            //TODO: change this so it has a clear option for creating a new calendar and displays a 'no calendars'
 
             this.activeCalendar = Calendar.Generate(new Date("August 1, 2024"), new Date("June 30, 2025"), "Sample Calendar01");
             this.calendars.push(this.activeCalendar);
@@ -34,7 +33,6 @@ export default class Manager{
     }
     processJData(tCal){
         //processes parsed JSONdata
-        //TODO: This is adding the calendars, not replacing.
         this.calendars = [];
         for(var i = 0; i < tCal.calendars.length; i++){
             this.calendars.push(Calendar.fromJson(tCal.calendars[i]));

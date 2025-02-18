@@ -4,7 +4,7 @@
     import Calendar from '../obj/Calendar.js';
     import elCalendar from './elCalendar.vue';
     import ToolEditor from './elToolEditor.vue';
-    import ServerConnect from '@/components/ServerConnect.vue';
+    import ServerConnect from '@/EdSuite/ServerConnect.vue';
     const calMan = ref(new Manager());
     const hasChanged = ref(false);
     const newCalTitle = ref("");
@@ -106,7 +106,12 @@ function handleFileUpload(){
     
 </script>
 <template>
-    <ServerConnect :obj = "calMan" :hasChanged = "hasChanged" @fetched = "(val) => calMan.processJData(val)" @saved = "hasChanged = false" />
+    <ServerConnect 
+        :obj = "calMan" 
+        :appNumber = 1
+         :hasChanged = "hasChanged"
+          @fetched = "(val) => calMan.processJData(val)" 
+          @saved = "hasChanged = false" />
     <nav id="calNav">
         <select v-model = "calMan.activeCalendar">
             <option v-for= "calendar in calMan.calendars" :value = "calendar">{{ calendar.name }}</option>
