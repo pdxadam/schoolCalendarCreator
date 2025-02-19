@@ -52,7 +52,7 @@
     }
     function updateRegister(value, message){
         if (value == true){
-            toast.open({duation: 3000, type: "is-success", message: "Registration Successful. Please login"});
+            toast.open({duation: 5000, type: "is-success", message: "Registration Successful. Please check your email for the verification link. Sender will be no_reply@mclainonline.com."});
             registerFormActive.value = false;
             loginFormActive.value = true;
         }
