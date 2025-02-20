@@ -151,7 +151,16 @@ export default class Calendar{
         for (let month of this.months){
             
             //for each month
-            calSheet.addRow(["Month: ", month.monthName, "Student Days: ", month.studentDayCount, "Teacher Days: ", month.teacherDayCount]);
+            let titleRow = calSheet.addRow([month.monthName]);            
+            rowCount++;
+            calSheet.mergeCells(rowCount, 1, rowCount, 9);
+            titleRow.getCell(1).alignment = {horizontal: 'center' };
+            titleRow.getCell(1).fill = {
+                type: 'pattern',
+                pattern: 'solid', 
+                fgColor: { argb: 'd7dddd'}
+            };
+            calSheet.addRow(["","","","","Student Days: ", month.studentDayCount, "Teacher Days: ", month.teacherDayCount]);
                         //add a row highlighting the month
                         //Name, Student day count, teacher day count
             rowCount++
