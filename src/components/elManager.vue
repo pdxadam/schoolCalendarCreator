@@ -1,5 +1,6 @@
 <script setup>
     import { ref, watch } from 'vue';
+    
     import Manager from '../obj/Manager.js';
     import Calendar from '../obj/Calendar.js';
     import elCalendar from './elCalendar.vue';
@@ -103,6 +104,10 @@ function handleFileUpload(){
     }
 
 }
+function downloadExcel(){
+    calMan.value.activeCalendar.getExcel();
+
+}
     
 </script>
 <template>
@@ -132,6 +137,7 @@ function handleFileUpload(){
                 <span class="button" @click="formState = 'shown'; settingsDisplay= 'hidden';">New Calendar</span>
                 <span class="button" @click = downloadiCal()>Get iCal</span>
                 <span class="button" @click = downloadBackup()>Backup Current Calendar</span>
+                <span class="button" @click = downloadExcel()>Get Excel</span>
                 <h4>Upload backup: </h4><input type="file" v-on:change="handleFileUpload()" ref="file">
             </div>
             <div>

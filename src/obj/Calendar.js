@@ -1,11 +1,19 @@
 
 import CalMonth from './CalMonth.js'
 import DayType from './DayType.js'
+import * as ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 export default class Calendar{
     name;
     startDate;
     endDate;
     months = [];
+    colorTranslate = {"white": "#FFFFFF",
+        "black": "#000000",
+        "tan": "#D2B48C",
+        "yellow": "#FFFF00",
+
+    }
     //TODO:move tools to Manager level
     //TODO: DayType eye dropper
 
@@ -62,6 +70,7 @@ export default class Calendar{
     constructor(){ //dates
         
     }
+    
     get teacherDayCount(){
         var teacherCount = 0;
         for (var i = 0; i < this.months.length; i++){
@@ -106,6 +115,107 @@ export default class Calendar{
         //what if there aren't any term starts?  Then we say none have been defined
         return terms;
     }
+    //--------------------------
+    translateColor(color){
+        color = color.toLowerCase();
+        if (color in this.colorTranslate){
+            return this.colorTranslate[color].toUpperCase();
+        }
+        else{
+            return color.toUpperCase();
+        }
+    }
+    getExcel(){
+        console.log("gotcha!");
+        const workbook = new ExcelJS.Workbook();
+        workbook.creator = "McLainonline.com";
+        workbook.lastModifiedBy = "mclainonline.com";
+        workbook.created = new Date();
+        workbook.modified = new Date();
+
+        workbook.properties.date1904 = true;
+        workbook.calcProperties.fullCalcOnLoad = true;
+        workbook.views = [
+            { x:0, y: 0, width: 10000, height: 20000, firstSheet: 0, activeTab: 1, visibility: 'visible'
+
+        }]
+        const calSheet = workbook.addWorksheet(this.name);
+        calSheet.addRow(["Title:", this.name]);
+        //add a row naming the calendar
+        //add a row including all the counts
+        //add a row with all the daytypes included
+        for (let month of this.months){
+            //for each month
+            calSheet.addRow(["Month: ", month.monthName, "Student Days: ", month.studentDayCount, "Teacher Days: ", month.teacherDayCount]);
+                        //add a row highlighting the month
+                        //Name, Student day count, teacher day count
+            calSheet.addRow(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Student Days: ", "Teacher Days"]);
+
+            var detailList = [];
+            for (let week of month.weeks){
+                //for each week in the month
+                let weekRow = calSheet.addRow([]);
+                for (let i = 0; i < week.days.length; i++){
+                    let day = week.days[i];
+                    let cell = weekRow.getCell((i + 1)); 
+                    if (day != null){                                           
+                        let detail = day.thisDate.getDate();
+                        if (day.dayType.shouldExport){
+                            detail += ": " + day.dayType.title;
+                            if (day.notes != ""){
+                                detail += "(" + day.notes + ")";
+                            }
+                        }                  
+                        cell.value = detail;
+                        //cell.font = {color: {argb: dayType.fontColor}};
+                        day.dayType.backColor = this.translateColor(day.dayType.backColor);
+                        console.log(day.dayType.backColor);
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid', 
+                            fgColor: { argb: day.dayType.backColor.substring(1) }
+                        };
+                        day.dayType.fontColor = this.translateColor(day.dayType.fontColor);
+                        cell.font = { color: { argb: day.dayType.fontColor.substring(1) }}
+                        
+                        //color it to match the daytype's color
+                        detailList.push(detail);
+                    }
+                    else{
+                        cell.value = "";
+                    }
+                }//days
+                weekRow.getCell(week.days.length + 1).value = week.studentCount;
+                weekRow.getCell(week.days.length + 2).value = week.teacherCount;
+                
+
+                                //add a row
+                                //for each day in the week
+                                    //add a cell for the day
+                                    //In the cell, add the date
+                                     //add the type name, the counts, and the description to a list (if it's exportable)
+            }//weeks 
+            calSheet.addRow("");                           
+        }        
+            //add the list to the right of the calendar.
+        
+   
+        var fileName = "Calendar_" + this.name + ".xlsx";
+        console.log(fileName);
+        
+        workbook.xlsx.writeBuffer().then(buffer => {
+            const blob = new Blob([buffer],{ type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    
+            saveAs(blob, fileName);
+            console.log("done");
+        });
+    
+        
+    }
+
+
+
+    //================
     makeICal(){
         //creates an ical file structure from this calendar in memory and returns it
         

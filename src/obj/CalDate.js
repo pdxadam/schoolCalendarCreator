@@ -40,20 +40,12 @@ export default class CalDate{
         this.notes.push(newNote);
     }
     countStudentDays(){
-        if (this.dayType < 1){
-            this.studentDayCount = 1;
-        }
-        else{
-            this.studentDayCount = 0;
-        }
+        //TODO: this is not correctly figuring out if it is a student day or not. It should be getting from the daytype
+        //or am I just not using it?
+        return this.dayType.studentDay;
     }
     countTeacherDays(){
-        if (this.dayType <= 3){
-            this.teacherDayCount = 1;
-        }
-        else{
-            this.teacherDayCount = 0;
-        }
+       return this.dayType.teacherDay;
     }
     setType(newType){
         

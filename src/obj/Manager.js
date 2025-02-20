@@ -8,12 +8,12 @@ export default class Manager{
         this.loadCalendars();
     }
     tools = [   
-        new DayType("Term Start", 1, 1, "aliceblue", "black", 1, true),
-        new DayType("Normal", 1, 1, "White", "Black", 0, false),
-        new DayType("Conferences", 0, 1, "tan", "white", 0, true ),
-        new DayType("Inservice", 0, 1, "yellow", "black", 0, true),
-        new DayType("Holiday", 0, 1, "green", "white", 0, true),
-        new DayType("Non-Contract", 0, 0, "blue", "white", 0, true)
+        new DayType("Term Start", 1, 1, "b4d2f7", "000000", 1, true),
+        new DayType("Normal", 1, 1, "FFFFFF", "000000", 0, false),
+        new DayType("Conferences", 0, 1, "e2b57a", "FFFFFF", 0, true ),
+        new DayType("Inservice", 0, 1, "FFFF00", "000000", 0, true),
+        new DayType("Holiday", 0, 1, "00FF00", "FFFFFF", 0, true),
+        new DayType("Non-Contract", 0, 0, "0000FF", "FFFFFF", 0, true)
     ]
     loadCalendars(){
         const jCal = localStorage.getItem(this.saveName);

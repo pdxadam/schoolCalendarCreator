@@ -7,9 +7,15 @@
     const loginMessage = ref("");
     const username = ref("");
     const email = ref("");
+    const verifyPassword = ref("");
     const password = ref("");
     const emit = defineEmits(["close", "registerUpdate"]);
     async function register(){
+        loginMessage.value = "";
+        if (password.value != verifyPassword.value){
+            loginMessage.value = "Passwords do not match. Please try again."
+            return;
+        }
         try{
             const response = await ed.sendPost({"rq": 5, 
                 "u": username.value, 
@@ -76,7 +82,15 @@
                                 required>
                             </b-input>
                         </b-field>
-
+                        <b-field label="Verify Password">
+                            <b-input
+                                type="password"
+                                v-model="verifyPassword"
+                                password-reveal
+                                placeholder="Retype your password"
+                                required>
+                            </b-input>
+                        </b-field>
                         <div>{{ loginMessage }}</div>
                     </section>
                     <footer class="modal-card-foot">
