@@ -126,6 +126,9 @@ export default class Calendar{
         }
     }
     getExcel(){
+        let rowCount = 0;
+        var monthStartRow = 0;
+        var monthEndRow = 0;
         console.log("gotcha!");
         const workbook = new ExcelJS.Workbook();
         workbook.creator = "McLainonline.com";
@@ -140,21 +143,26 @@ export default class Calendar{
 
         }]
         const calSheet = workbook.addWorksheet(this.name);
-        calSheet.addRow(["Title:", this.name]);
-        //add a row naming the calendar
+        calSheet.addRow(["Title:", this.name, "", "Student Days: ", this.studentDayCount, "Teacher Days: ", this.teacherDayCount]);
+        rowCount++;
+         //add a row naming the calendar
         //add a row including all the counts
         //add a row with all the daytypes included
         for (let month of this.months){
+            
             //for each month
             calSheet.addRow(["Month: ", month.monthName, "Student Days: ", month.studentDayCount, "Teacher Days: ", month.teacherDayCount]);
                         //add a row highlighting the month
                         //Name, Student day count, teacher day count
+            rowCount++
             calSheet.addRow(["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Student Days: ", "Teacher Days"]);
-
+            rowCount++;
+            monthStartRow = rowCount;
             var detailList = [];
             for (let week of month.weeks){
                 //for each week in the month
                 let weekRow = calSheet.addRow([]);
+                rowCount++;
                 for (let i = 0; i < week.days.length; i++){
                     let day = week.days[i];
                     let cell = weekRow.getCell((i + 1)); 
@@ -178,8 +186,8 @@ export default class Calendar{
                         day.dayType.fontColor = this.translateColor(day.dayType.fontColor);
                         cell.font = { color: { argb: day.dayType.fontColor.substring(1) }}
                         
-                        //color it to match the daytype's color
-                        detailList.push(detail);
+                        // it to match the daytype's color
+                        if (day.dayType.shouldExport)detailList.push(detail);
                     }
                     else{
                         cell.value = "";
@@ -195,7 +203,14 @@ export default class Calendar{
                                     //In the cell, add the date
                                      //add the type name, the counts, and the description to a list (if it's exportable)
             }//weeks 
-            calSheet.addRow("");                           
+            monthEndRow = rowCount;
+            calSheet.mergeCells(monthStartRow, 10,monthEndRow, 12);
+            let detailCell = 
+            calSheet.getRow(monthStartRow).getCell(10);
+            detailCell.value = detailList.join(', ');
+            detailCell.alignment = { vertical: 'top', wrapText: true};
+            calSheet.addRow(""); 
+            rowCount++;                          
         }        
             //add the list to the right of the calendar.
         

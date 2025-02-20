@@ -15,6 +15,7 @@ export default class Manager{
         new DayType("Holiday", 0, 1, "00FF00", "FFFFFF", 0, true),
         new DayType("Non-Contract", 0, 0, "0000FF", "FFFFFF", 0, true)
     ]
+    //TODO: move tools back to calendar level. That way when I share a calendar, tools go with them.
     loadCalendars(){
         const jCal = localStorage.getItem(this.saveName);
         
