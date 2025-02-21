@@ -13,7 +13,7 @@
             const response = await ed.sendPost({"rq": 10, 
             "e": email.value, 
             "p": password.value, 
-            "app": 2});
+            "app": 1});
             if (response == "Success."){
                 // TODO: get username back from this.
                 emit("loginUpdate", true, email.value);
